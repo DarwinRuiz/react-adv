@@ -1,0 +1,8 @@
+import { Product } from './product';
+
+export interface ProductContextProps {
+    counter: number;
+    product: Product;
+    incrementBy: (value: number) => void;
+    decrementBy: (value: number) => void;
+}
