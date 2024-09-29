@@ -3,3 +3,7 @@ export interface Product {
     title: string;
     img: string;
 }
+
+export interface ProductInCart extends Product {
+    count: number
+}
