@@ -3,61 +3,45 @@ import { ProductButton } from '../components/ProductButtons'
 import { ProductCard } from '../components/ProductCard'
 import { ProductImage } from '../components/ProductImage'
 import { ProductTitle } from '../components/ProductTitle'
-import { Product, } from '../interfaces/product'
 
 import './../styles/custom-styles.css'
 import { products } from '../data/products'
-import { useShoppingCart } from '../hooks/useShoppingCart'
+
+const product = products[0]
 
 export const ShoppingPage = (): JSX.Element => {
-
-    const { shoppingCart, onProductCountChange } = useShoppingCart()
 
     return (
         <div>
             <h1>Shopping Store</h1>
             <hr />
-            <div style={{
-                display: 'flex',
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-            }}>
+
+            <ProductCard key={product.id} product={product} style={{
+                backgroundColor: '#70D1F8'
+            }}
+
+                initialValues={{
+                    count: 4,
+                    maxCount: 10
+                }}
+            >
                 {
-                    products.map((product: Product) => (
-                        <ProductCard key={product.id} product={product} style={{
-                            backgroundColor: '#70D1F8'
-                        }}
-                            onChange={onProductCountChange}
-                            value={shoppingCart[product.id]?.count || 0}
-                        >
+                    ({ reset, incrementBy, isMaxCountReached, count }) => (
+                        <>
                             <ProductImage />
                             <ProductTitle />
                             <ProductButton />
-                        </ProductCard>
-                    ))
+                            <button onClick={reset}>Reset</button>
+                            <button onClick={() => incrementBy(-2)}>-2</button>
+                            {
+                                !isMaxCountReached && <button onClick={() => incrementBy(2)}>+2</button>
+                            }
+                            <span>Count: {count}</span>
+                        </>
+                    )
                 }
-            </div>
+            </ProductCard>
 
-
-            <div className='shopping-cart'>
-                {
-                    Object.entries(shoppingCart).map(([key, product]) => (
-                        <ProductCard key={key} product={product} style={{
-                            backgroundColor: '#70D1F8',
-                            width: '100px',
-                        }}
-                            onChange={onProductCountChange}
-                            value={product.count}
-                        >
-                            <ProductImage />
-                            <ProductButton style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                            }} />
-                        </ProductCard>
-                    ))
-                }
-            </div>
         </div>
     )
 }
